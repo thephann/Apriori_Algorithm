@@ -64,25 +64,12 @@ def generate_L(data_set, k, min_support):
         L.append(Lksub1)
     return L, support_data
 
-def apriori(L, support_data, min_conf):
-    Alist = []
-    sub_set_list = []
-    for i in range(0, len(L)):
-        for freq_set in L[i]:
-            for sub_set in sub_set_list:
-                if sub_set.issubset(freq_set):
-                    conf = support_data[freq_set] / support_data[freq_set - sub_set]
-                    apri = (freq_set - sub_set, sub_set, conf)
-                    if conf >= min_conf and apri not in Alist:
-                        Alist.append(apri)
-            sub_set_list.append(freq_set)
-    return Alist
 
 if __name__ == "__main__":
     data_set =  [['M1', 'M2', 'M5'], ['M2', 'M4'], ['M2', 'M3'], ['M1', 'M2', 'M4'], ['M1', 'M3'],['M2','M3'],['M1','M3'],
            ['M1', 'M2', 'M3','M5'],['M1','M2','M3']]
     L, support_data = generate_L(data_set, k=3, min_support=0.1)
-    Alist = apriori(L, support_data, min_conf=0.5)
+
     for Lk in L:
         print("=" * 20)
         print("frequent " + str(len(list(Lk)[0])) + "-itemsets\t\tsupport")
