@@ -1,20 +1,20 @@
 
-def create_C1(data_set):
+def createC1(data_set):
     C1 = set()
-    for t in data_set:
-        for item in t:
+    for data in data_set:
+        for item in data:
             item_set = frozenset([item])
             C1.add(item_set)
     return C1
 
-def is_apriori(Ck_item, Lksub1):
+def isApriori(Ck_item, Lksub1):
     for item in Ck_item:
         sub_Ck = Ck_item - frozenset([item])
         if sub_Ck not in Lksub1:
             return False
     return True
 
-def create_Ck(Lksub1, k):
+def createCk(Lksub1, k):
     Ck = set()
     len_Lksub1 = len(Lksub1)
     list_Lksub1 = list(Lksub1)
@@ -26,49 +26,49 @@ def create_Ck(Lksub1, k):
             l2.sort()
             if l1[0:k-2] == l2[0:k-2]:
                 Ck_item = list_Lksub1[i] | list_Lksub1[j]
-                if is_apriori(Ck_item, Lksub1):
+                if isApriori(Ck_item, Lksub1):
                     Ck.add(Ck_item)
     return Ck
 
 
-def generate_Lk_by_Ck(data_set, Ck, min_support, support_data):
+def generateLkByCk(data_set, Ck, min_support, support_data):
     Lk = set()
     item_count = {}
-    for t in data_set:
+    for data in data_set:
         for item in Ck:
-            if item.issubset(t):
+            if item.issubset(data):
                 if item not in item_count:
                     item_count[item] = 1
                 else:
                     item_count[item] += 1
-    t_num = float(len(data_set))
+    data_count = float(len(data_set))
     for item in item_count:
-        if (item_count[item] / t_num) >= min_support:
+        if (item_count[item] / data_count) >= min_support:
             Lk.add(item)
-            support_data[item] = item_count[item] / t_num
+            support_data[item] = item_count[item] / data_count
     return Lk
 
 
 
-def generate_L(data_set, k, min_support):
+def generateLk(data_set, k, min_support):
     support_data = {}
-    C1 = create_C1(data_set)
-    L1 = generate_Lk_by_Ck(data_set, C1, min_support, support_data)
+    C1 = createC1(data_set)
+    L1 = generateLkByCk(data_set, C1, min_support, support_data)
     Lksub1 = L1.copy()
-    L = []
-    L.append(Lksub1)
+    Lk = []
+    Lk.append(Lksub1)
     for i in range(2, k+1):
-        Ci = create_Ck(Lksub1, i)
-        Li = generate_Lk_by_Ck(data_set, Ci, min_support, support_data)
+        Ci = createCk(Lksub1, i)
+        Li = generateLkByCk(data_set, Ci, min_support, support_data)
         Lksub1 = Li.copy()
-        L.append(Lksub1)
-    return L, support_data
+        Lk.append(Lksub1)
+    return Lk, support_data
 
 
 if __name__ == "__main__":
     data_set =  [['M1', 'M2', 'M5'], ['M2', 'M4'], ['M2', 'M3'], ['M1', 'M2', 'M4'], ['M1', 'M3'],['M2','M3'],['M1','M3'],
            ['M1', 'M2', 'M3','M5'],['M1','M2','M3']]
-    L, support_data = generate_L(data_set, k=3, min_support=0.1)
+    L, support_data = generateLk(data_set, k=3, min_support=0.1)
 
     for Lk in L:
         print("=" * 20)
