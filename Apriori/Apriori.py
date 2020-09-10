@@ -68,13 +68,12 @@ def generateLk(data_set, k, min_support):
 if __name__ == "__main__":
     data_set =  [['M1', 'M2', 'M5'], ['M2', 'M4'], ['M2', 'M3'], ['M1', 'M2', 'M4'], ['M1', 'M3'],['M2','M3'],['M1','M3'],
            ['M1', 'M2', 'M3','M5'],['M1','M2','M3']]
-    L, support_data = generateLk(data_set, k=3, min_support=0.1)
+    L, support_data = generateLk(data_set, k=4, min_support=0.1)
 
     for Lk in L:
         print("=" * 20)
-        print("frequent " + str(len(list(Lk)[0])) + "-itemsets\t\tsupport")
-        print("=" * 20)
+        print("frequent " + str(len(list(Lk)[0])) + "-itemsets : ")
         for freq_set in Lk:
-            print(freq_set, support_data[freq_set])
+            print(freq_set)
 
 
